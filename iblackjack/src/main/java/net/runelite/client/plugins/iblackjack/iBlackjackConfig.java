@@ -50,7 +50,7 @@ public interface iBlackjackConfig extends Config {
             section = "delayConfig"
     )
     default int sleepMin() {
-        return 60;
+        return 70;
     }
 
     @Range(
@@ -204,7 +204,7 @@ public interface iBlackjackConfig extends Config {
             title = "instructionsTitle"
     )
     default String instructions() {
-        return "Refer to discord for supported rooms. Select the type of NPC to blackjack in config and then Knock-out the NPC to start.\nRestocks Jugs of Wine from shop and escapes combat. Blackjack must manually be reset after restocking and combat reset.";
+        return "AAA Refer to discord for supported rooms. Select the type of NPC to blackjack in config and then Knock-out the NPC to start.\nRestocks Jugs of Wine from shop and escapes combat. Blackjack must manually be reset after restocking and combat reset.";
     }
 
     @ConfigItem(

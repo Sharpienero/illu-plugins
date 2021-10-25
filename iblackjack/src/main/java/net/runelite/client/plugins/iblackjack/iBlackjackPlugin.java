@@ -57,7 +57,7 @@ import java.time.Instant;
 @Extension
 @PluginDependency(iUtils.class)
 @PluginDescriptor(
-        name = "iBlackjack Helper",
+        name = "ATriadMF",
         enabledByDefault = false,
         description = "Illumine - Blackjack helper plugin. Handles knocking out and pickpocketing bandits",
         tags = {"illumine", "thieving", "blackjack", "helper", "bot"}
@@ -101,9 +101,11 @@ public class iBlackjackPlugin extends Plugin {
     Player player;
 
     public static final int POLLNIVNEACH_REGION = 13358;
+    public static final int DRAYNOR_REGION = 12338;
     public static final String SUCCESS_BLACKJACK = "You smack the bandit over the head and render them unconscious.";
     public static final String FAILED_BLACKJACK = "Your blow only glances off the bandit's head.";
     public static long nextKnockoutTick = 0;
+    public static int nextPickpocketTick = 0;
     public static int selectedNPCIndex;
     public static int eatHP;
     public static boolean inCombat;
@@ -137,19 +139,8 @@ public class iBlackjackPlugin extends Plugin {
     private void loadTasks() {
         tasks.clear();
         tasks.addAll(
-                injector.getInstance(TimeoutTask.class),
                 injector.getInstance(MovingTask.class),
-                injector.getInstance(HopTask.class),
-                injector.getInstance(ShopTask.class),
-                injector.getInstance(ReturnTask.class),
-                injector.getInstance(PickpocketTask.class),
-                injector.getInstance(EatTask.class),
-                injector.getInstance(LeaveRoomTask.class),
-                injector.getInstance(ResetCombatTask.class),
-                injector.getInstance(KnockoutTask.class),
-                injector.getInstance(DropTask.class),
-                injector.getInstance(SelectNPCTask.class),
-                injector.getInstance(BreakTask.class)
+                injector.getInstance(PickpocketTask.class)
         );
     }
 
@@ -220,7 +211,7 @@ public class iBlackjackPlugin extends Plugin {
         }
         player = client.getLocalPlayer();
         if (client != null && player != null && client.getGameState() == GameState.LOGGED_IN
-                && client.getLocalPlayer().getWorldLocation().getRegionID() == POLLNIVNEACH_REGION) {
+                && (client.getLocalPlayer().getWorldLocation().getRegionID() == POLLNIVNEACH_REGION || client.getLocalPlayer().getWorldLocation().getRegionID() == DRAYNOR_REGION)) {
             updateStats();
             if (chinBreakHandler.shouldBreak(this)) {
                 status = "Taking a break";
@@ -231,6 +222,7 @@ public class iBlackjackPlugin extends Plugin {
                 timeout--;
                 return;
             }
+
             Task task = tasks.getValidTask();
 
             if (task != null) {
@@ -250,6 +242,13 @@ public class iBlackjackPlugin extends Plugin {
             return;
         }
         final String msg = event.getMessage();
+
+        //At 99, you never fail, so no need to check failure.
+        if (event.getType() == ChatMessageType.SPAM && (msg.equals("You pick the Master Farmer's pocket."))) {
+            failureCount = 0;
+            final int ticks = (config.random()) ? RandomUtils.nextInt(5, 10) : 6;
+            nextKnockoutTick = client.getTickCount() + ticks;
+        }
 
         if (event.getType() == ChatMessageType.SPAM && (msg.equals(SUCCESS_BLACKJACK) || (msg.equals(FAILED_BLACKJACK)))) {
             failureCount = 0;
@@ -283,7 +282,7 @@ public class iBlackjackPlugin extends Plugin {
         if (!startBot) {
             return;
         }
-        if (event.getMenuOption().equals("Knock-Out") && selectedNPCIndex == 0) {
+        if (event.getMenuOption().equals("Pickpocket") && selectedNPCIndex == 0) {
             final int ticks = (config.random()) ? RandomUtils.nextInt(3, 4) : 4;
             nextKnockoutTick = client.getTickCount() + ticks;
             selectedNPCIndex = event.getId();

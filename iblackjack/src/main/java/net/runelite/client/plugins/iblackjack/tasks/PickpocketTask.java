@@ -10,29 +10,30 @@ import static net.runelite.client.plugins.iblackjack.iBlackjackPlugin.*;
 
 public class PickpocketTask extends Task {
     NPC bandit;
+    NPC masterfarmer;
 
     @Override
     public boolean validate() {
         if (selectedNPCIndex == 0) {
+            System.out.println("Npc ID = 0");
             return false;
         }
-        bandit = npc.findNearestNpcIndex(selectedNPCIndex, config.npcType().npcid);
-        return !inCombat && client.getTickCount() < nextKnockoutTick && bandit != null;
+        else {
+            System.out.println("Else Npc ID = " + selectedNPCIndex);
+        }
+
+        masterfarmer = npc.findNearestNpcIndex(selectedNPCIndex, config.npcType().npcid);
+        return client.getTickCount() < nextKnockoutTick && masterfarmer != null;
     }
 
     @Override
     public String getTaskDescription() {
-        return "Pickpocket bandit";
+        return "Pickpocket master farmer";
     }
 
     @Override
     public void onGameTick(GameTick event) {
         entry = new MenuEntry("", "", selectedNPCIndex, MenuAction.NPC_THIRD_OPTION.getId(), 0, 0, false);
-        utils.doActionMsTime(entry, bandit.getConvexHull().getBounds(), sleepDelay());
-        if (config.random() && calc.getRandomIntBetweenRange(0, 10) == 0) {
-            //timeout = calc.getRandomIntBetweenRange(1,2);
-            timeout = tickDelay();
-            utils.sendGameMessage("Resting for " + timeout + " tick(s)");
-        }
+        utils.doActionMsTime(entry, masterfarmer.getConvexHull().getBounds(), sleepDelay());
     }
 }
