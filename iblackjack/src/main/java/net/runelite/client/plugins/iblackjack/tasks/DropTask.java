@@ -22,18 +22,17 @@ public class DropTask extends Task {
 
     @Override
     public boolean validate() {
-        return !inCombat && !isShopOpen() && !inventory.containsItem(ItemID.JUG_OF_WINE) &&
-                inventory.containsItem(ItemID.JUG) && action.delayedActions.isEmpty();
+        return inventory.getEmptySlots() < 5;
     }
 
     @Override
     public String getTaskDescription() {
-        return "Dropping Jugs";
+        return "Banking seeds";
     }
 
     @Override
     public void onGameTick(GameTick event) {
-        log.info("Entering drop task");
+        log.info("Entering bank task");
         selectedNPCIndex = 0;
         nextKnockoutTick = 0;
 

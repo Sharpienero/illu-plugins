@@ -140,7 +140,9 @@ public class iBlackjackPlugin extends Plugin {
         tasks.clear();
         tasks.addAll(
                 injector.getInstance(MovingTask.class),
-                injector.getInstance(PickpocketTask.class)
+                injector.getInstance(PickpocketTask.class),
+                injector.getInstance(OpenBankTask.class),
+                injector.getInstance(DepositTask.class)
         );
     }
 

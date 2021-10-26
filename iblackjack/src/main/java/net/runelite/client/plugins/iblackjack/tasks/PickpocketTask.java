@@ -9,7 +9,6 @@ import net.runelite.client.plugins.iblackjack.Task;
 import static net.runelite.client.plugins.iblackjack.iBlackjackPlugin.*;
 
 public class PickpocketTask extends Task {
-    NPC bandit;
     NPC masterfarmer;
 
     @Override
