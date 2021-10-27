@@ -166,11 +166,10 @@ public class iBlackjackPlugin extends Plugin {
                 Player player = client.getLocalPlayer();
                 if (client != null && player != null && client.getGameState() == GameState.LOGGED_IN) {
                     log.info("starting Blackjack plugin");
+                    selectedNPCIndex = 1813;
                     loadTasks();
                     startBot = true;
-                    inCombat = false;
                     nextKnockoutTick = 0;
-                    selectedNPCIndex = 0;
                     failureCount = 0;
                     chinBreakHandler.startPlugin(this);
                     timeout = 0;

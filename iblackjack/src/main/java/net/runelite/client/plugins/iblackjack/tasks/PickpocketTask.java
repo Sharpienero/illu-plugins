@@ -5,24 +5,28 @@ import net.runelite.api.MenuEntry;
 import net.runelite.api.NPC;
 import net.runelite.api.events.GameTick;
 import net.runelite.client.plugins.iblackjack.Task;
+import net.runelite.client.plugins.iutils.BankUtils;
+
+import javax.inject.Inject;
 
 import static net.runelite.client.plugins.iblackjack.iBlackjackPlugin.*;
 
 public class PickpocketTask extends Task {
     NPC masterfarmer;
 
+    @Inject
+    private BankUtils bank;
+
     @Override
     public boolean validate() {
-        if (selectedNPCIndex == 0) {
-            System.out.println("Npc ID = 0");
-            return false;
+        if (!inventory.isFull() && !bank.isOpen()) {
+            System.out.println("Inventory is not full, find MF");
+            masterfarmer = npc.findNearestNpcIndex(selectedNPCIndex, config.npcType().npcid);
+            System.out.println(masterfarmer);
+            return masterfarmer != null;
         }
-        else {
-            System.out.println("Else Npc ID = " + selectedNPCIndex);
-        }
-
-        masterfarmer = npc.findNearestNpcIndex(selectedNPCIndex, config.npcType().npcid);
-        return client.getTickCount() < nextKnockoutTick && masterfarmer != null;
+        System.out.println("Returning false for PickpocketTask - Inventory is NOT EMPTY and BANK IS OPEN");
+        return false;
     }
 
     @Override

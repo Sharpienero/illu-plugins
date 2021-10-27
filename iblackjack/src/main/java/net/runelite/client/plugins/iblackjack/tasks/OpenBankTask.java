@@ -28,7 +28,7 @@ public class OpenBankTask extends Task {
 
     @Override
     public boolean validate() {
-        return !inventory.isEmpty() && !bank.isOpen();
+        return inventory.isFull() && !bank.isOpen();
     }
 
     @Override

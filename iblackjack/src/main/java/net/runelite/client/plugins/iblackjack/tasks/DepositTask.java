@@ -7,8 +7,13 @@ import net.runelite.client.plugins.iblackjack.Task;
 import net.runelite.client.plugins.iblackjack.iBlackjackPlugin;
 import net.runelite.client.plugins.iutils.BankUtils;
 import net.runelite.client.plugins.iutils.scripts.ReflectBreakHandler;
+import net.runelite.api.widgets.Widget;
+import net.runelite.api.widgets.WidgetInfo;
+import net.runelite.api.Point;
 
 import javax.inject.Inject;
+
+import java.util.concurrent.ScheduledExecutorService;
 
 import static net.runelite.client.plugins.iblackjack.iBlackjackPlugin.timeout;
 
@@ -27,22 +32,12 @@ public class DepositTask extends Task {
         return !inventory.isEmpty() && bank.isOpen();
     }
 
+    @Inject
+    private ScheduledExecutorService executorService;
+
     @Override
     public String getTaskDescription() {
         return "Banking all items";
-    }
-
-
-    private void openBank() {
-        GameObject bankTarget = object.findNearestBank();
-        if (bankTarget != null) {
-            MenuEntry targetMenu = new MenuEntry("", "", bankTarget.getId(),
-                    bank.getBankMenuOpcode(bankTarget.getId()), bankTarget.getSceneMinLocation().getX(),
-                    bankTarget.getSceneMinLocation().getY(), false);
-            utils.doActionMsTime(targetMenu, bankTarget.getConvexHull().getBounds(), sleepDelay());
-        } else {
-            utils.sendGameMessage("Bank not found, stopping");
-        }
     }
 
     @Override

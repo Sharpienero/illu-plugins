@@ -60,7 +60,7 @@ public class BankUtils {
     public boolean isOpen() {
         Widget bankWidget = client.getWidget(WidgetInfo.BANK_ITEM_CONTAINER);
         // When you close the bank manually with a hot-key, the widget is still active but hidden.
-        return bankWidget != null /*&& !bankWidget.isHidden()*/; //TODO handle client thread for isHidden
+        return bankWidget != null && !bankWidget.isHidden(); //TODO handle client thread for isHidden
     }
 
     public void close() {
@@ -195,8 +195,10 @@ public class BankUtils {
         {
             Widget depositInventoryWidget = client.getWidget(WidgetInfo.BANK_DEPOSIT_INVENTORY);
             if (isDepositBoxOpen()) {
+                System.out.println("It thinks this is a deposit box");
                 menu.setEntry(new MenuEntry("", "", 1, MenuAction.CC_OP.getId(), -1, 12582916, false)); //deposit all in bank interface
             } else {
+                System.out.println("It thinks this is a bank box");
                 menu.setEntry(new MenuEntry("", "", 1, MenuAction.CC_OP.getId(), -1, 786474, false)); //deposit all in bank interface
             }
             if ((depositInventoryWidget != null)) {
