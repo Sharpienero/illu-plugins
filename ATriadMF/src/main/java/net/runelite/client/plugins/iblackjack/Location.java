@@ -6,6 +6,7 @@ import net.runelite.api.coords.WorldArea;
 import net.runelite.api.coords.WorldPoint;
 
 public enum Location {
+    DRAYNOR_MASTER_FARMER(new WorldArea(new WorldPoint(3074, 3245, 0), new WorldPoint(3086, 3255, 0)), new WorldPoint(3350, 2957, 0)),
     THUG_ROOM_ONE(new WorldArea(new WorldPoint(3347, 2952, 0), new WorldPoint(3352, 2957, 0)), new WorldPoint(3350, 2957, 0)),
     THUG_ROOM_TWO(new WorldArea(new WorldPoint(3339, 2952, 0), new WorldPoint(3345, 2957, 0)), new WorldPoint(3345, 2955, 0)),
     BANDIT_ROOM_ONE(new WorldArea(new WorldPoint(3362, 3000, 0), new WorldPoint(3366, 3004, 0)), new WorldPoint(3364, 2999, 0), new WorldPoint(3364, 3003, 0)),
