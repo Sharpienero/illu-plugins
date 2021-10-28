@@ -204,7 +204,7 @@ public interface iBlackjackConfig extends Config {
             title = "instructionsTitle"
     )
     default String instructions() {
-        return "AAA Refer to discord for supported rooms. Select the type of NPC to blackjack in config and then Knock-out the NPC to start.\nRestocks Jugs of Wine from shop and escapes combat. Blackjack must manually be reset after restocking and combat reset.";
+        return "Start in the room with cons cape in slot 28 in inventory (bottom right slot). Make sure both curtains are closed and that there's only 1 Menaphite thug in the inventory only.";
     }
 
     @ConfigItem(
@@ -219,18 +219,18 @@ public interface iBlackjackConfig extends Config {
 
     @ConfigItem(
             keyName = "minEatHP",
-            name = "Min eat HP",
-            description = "Minimum eat hitpoints",
+            name = "Min teleport health",
+            description = "Minimum teleport HP",
             position = 30
     )
     default int minEatHP() {
-        return 7;
+        return 12;
     }
 
     @ConfigItem(
             keyName = "maxEatHP",
-            name = "Min eat HP",
-            description = "Max eat hitpoints",
+            name = "Max teleport health",
+            description = "Maximum teleport HP",
             position = 35
     )
     default int maxEatHP() {
@@ -250,7 +250,7 @@ public interface iBlackjackConfig extends Config {
     @ConfigItem(
             keyName = "enableUI",
             name = "Enable UI",
-            description = "Enable to turn on in game UI",
+            description = "Enable to turn on in-game UI",
             position = 95
     )
     default boolean enableUI() {

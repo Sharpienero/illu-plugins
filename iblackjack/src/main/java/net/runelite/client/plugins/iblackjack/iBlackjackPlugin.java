@@ -43,6 +43,7 @@ import net.runelite.client.plugins.PluginDescriptor;
 import net.runelite.client.plugins.iblackjack.tasks.*;
 import net.runelite.client.plugins.iutils.CalculationUtils;
 import net.runelite.client.plugins.iutils.InventoryUtils;
+import net.runelite.client.plugins.iutils.ObjectUtils;
 import net.runelite.client.plugins.iutils.iUtils;
 import net.runelite.client.plugins.iutils.scripts.ReflectBreakHandler;
 import net.runelite.client.ui.overlay.OverlayManager;
@@ -57,9 +58,9 @@ import java.time.Instant;
 @Extension
 @PluginDependency(iUtils.class)
 @PluginDescriptor(
-        name = "iBlackjack Helper",
+        name = "AAB - Custom BJ",
         enabledByDefault = false,
-        description = "Illumine - Blackjack helper plugin. Handles knocking out and pickpocketing bandits",
+        description = "Sharpienero - Custom blackjack script. Handles everything.",
         tags = {"illumine", "thieving", "blackjack", "helper", "bot"}
 )
 @Slf4j
@@ -94,6 +95,9 @@ public class iBlackjackPlugin extends Plugin {
     @Inject
     private ConfigManager configManager;
 
+    @Inject
+    public ObjectUtils object;
+
     private TaskSet tasks = new TaskSet();
     public static LocalPoint beforeLoc = new LocalPoint(0, 0);
     MenuEntry targetMenu;
@@ -105,7 +109,7 @@ public class iBlackjackPlugin extends Plugin {
     public static final String FAILED_BLACKJACK = "Your blow only glances off the bandit's head.";
     public static long nextKnockoutTick = 0;
     public static int selectedNPCIndex;
-    public static int eatHP;
+    public static int teleportHP;
     public static boolean inCombat;
     public static boolean startBot;
     public static long sleepLength;
@@ -137,19 +141,12 @@ public class iBlackjackPlugin extends Plugin {
     private void loadTasks() {
         tasks.clear();
         tasks.addAll(
-                injector.getInstance(TimeoutTask.class),
+                injector.getInstance(StatueHealTask.class),
+                injector.getInstance(TeleportToNardahTask.class),
                 injector.getInstance(MovingTask.class),
-                injector.getInstance(HopTask.class),
-                injector.getInstance(ShopTask.class),
-                injector.getInstance(ReturnTask.class),
-                injector.getInstance(PickpocketTask.class),
-                injector.getInstance(EatTask.class),
-                injector.getInstance(LeaveRoomTask.class),
-                injector.getInstance(ResetCombatTask.class),
-                injector.getInstance(KnockoutTask.class),
-                injector.getInstance(DropTask.class),
-                injector.getInstance(SelectNPCTask.class),
-                injector.getInstance(BreakTask.class)
+                injector.getInstance(DrainPrayerTask.class),
+                injector.getInstance(TeleportToPollTask.class),
+                injector.getInstance(TeleportToPollTask.class)
         );
     }
 
@@ -181,7 +178,7 @@ public class iBlackjackPlugin extends Plugin {
                     failureCount = 0;
                     chinBreakHandler.startPlugin(this);
                     timeout = 0;
-                    eatHP = calc.getRandomIntBetweenRange(config.minEatHP(), config.maxEatHP());
+                    teleportHP = calc.getRandomIntBetweenRange(config.minEatHP(), config.maxEatHP());
                     targetMenu = null;
                     botTimer = Instant.now();
                     overlayManager.add(overlay);
@@ -220,7 +217,7 @@ public class iBlackjackPlugin extends Plugin {
         }
         player = client.getLocalPlayer();
         if (client != null && player != null && client.getGameState() == GameState.LOGGED_IN
-                && client.getLocalPlayer().getWorldLocation().getRegionID() == POLLNIVNEACH_REGION) {
+                && (client.getLocalPlayer().getWorldLocation().getRegionID() == POLLNIVNEACH_REGION || client.getLocalPlayer().getWorldLocation().getRegionID() == 13613)) {
             updateStats();
             if (chinBreakHandler.shouldBreak(this)) {
                 status = "Taking a break";

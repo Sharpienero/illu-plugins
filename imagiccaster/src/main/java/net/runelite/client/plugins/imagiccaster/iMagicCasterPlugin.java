@@ -241,6 +241,7 @@ public class iMagicCasterPlugin extends Plugin {
             case "Single cast":
                 targetMenu = new MenuEntry("Cast", "", targetNPC.getIndex(), MenuAction.SPELL_CAST_ON_NPC.getId(),
                         0, 0, false);
+
                 utils.oneClickCastSpell(selectedSpell.getSpell(), targetMenu, targetNPC.getConvexHull().getBounds(), sleepDelay());
                 timeout = 4 + tickDelay();
                 return;

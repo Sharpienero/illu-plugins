@@ -53,6 +53,7 @@ public abstract class Task {
     public final WorldPoint MENAPHITE_POINT = new WorldPoint(3349, 2955, 0);
     public final WorldPoint shopPoint = new WorldPoint(3360, 2955, 0);
     private final WorldArea SHOP_AREA = new WorldArea(new WorldPoint(3353, 2953, 0), new WorldPoint(3364, 2961, 0));
+    private final WorldArea NARDAH_AREA = new WorldArea(new WorldPoint(3421, 2927, 0), new WorldPoint(3430, 2930, 0));
 
     public abstract boolean validate();
 
@@ -76,6 +77,11 @@ public abstract class Task {
 
     public boolean inShopArea() {
         return client.getLocalPlayer().getWorldArea().intersectsWith(SHOP_AREA);
+    }
+
+    public boolean isInNardah() {
+        System.out.println(client.getLocalPlayer().getWorldArea().intersectsWith(NARDAH_AREA));
+        return client.getLocalPlayer().getWorldArea().intersectsWith(NARDAH_AREA);
     }
 
     public boolean isShopOpen() {

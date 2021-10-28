@@ -40,9 +40,7 @@ public class OpenBankTask extends Task {
     private void openBank() {
         GameObject bankTarget = object.findNearestBank();
         if (bankTarget != null) {
-            MenuEntry targetMenu = new MenuEntry("", "", bankTarget.getId(),
-                    bank.getBankMenuOpcode(bankTarget.getId()), bankTarget.getSceneMinLocation().getX(),
-                    bankTarget.getSceneMinLocation().getY(), false);
+            MenuEntry targetMenu = new MenuEntry("", "", bankTarget.getId(), bank.getBankMenuOpcode(bankTarget.getId()), bankTarget.getSceneMinLocation().getX(), bankTarget.getSceneMinLocation().getY(), false);
             utils.doActionMsTime(targetMenu, bankTarget.getConvexHull().getBounds(), sleepDelay());
         } else {
             utils.sendGameMessage("Bank not found, stopping");

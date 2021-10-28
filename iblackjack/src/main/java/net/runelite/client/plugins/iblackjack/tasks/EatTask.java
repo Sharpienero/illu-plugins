@@ -11,7 +11,7 @@ import net.runelite.client.plugins.iblackjack.Task;
 
 import java.util.Set;
 
-import static net.runelite.client.plugins.iblackjack.iBlackjackPlugin.eatHP;
+import static net.runelite.client.plugins.iblackjack.iBlackjackPlugin.teleportHP;
 import static net.runelite.client.plugins.iblackjack.iBlackjackPlugin.timeout;
 
 @Slf4j
@@ -20,7 +20,7 @@ public class EatTask extends Task {
 
     @Override
     public boolean validate() {
-        return client.getBoostedSkillLevel(Skill.HITPOINTS) <= eatHP &&
+        return client.getBoostedSkillLevel(Skill.HITPOINTS) <= teleportHP &&
                 !isShopOpen() && inventory.getItemMenu(foodMenu) != null;
     }
 
@@ -37,7 +37,7 @@ public class EatTask extends Task {
             entry = new MenuEntry("", "", food.getId(), MenuAction.ITEM_FIRST_OPTION.getId(),
                     food.getIndex(), WidgetInfo.INVENTORY.getId(), false);
             utils.doActionMsTime(entry, food.getCanvasBounds(), sleepDelay());
-            eatHP = calc.getRandomIntBetweenRange(config.minEatHP(), config.maxEatHP());
+            teleportHP = calc.getRandomIntBetweenRange(config.minEatHP(), config.maxEatHP());
             timeout = tickDelay();
         }
         log.debug(status);
